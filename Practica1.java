@@ -124,17 +124,84 @@ public class Practica1 {
     }
 
     //EJERCICIO 3
+    // ESTA PERFECTO
     public static<T> Collection<Set<T>> divideInSets (Iterator<T> it) {
-        //TODO
-        return null;
+        
+        // Collection de sets final
+        Collection<Set<T>> Col_final = new ArrayList<>();
+
+        // Iniciamos el recorrido con el iterador
+        while (it.hasNext()) {
+
+            // Cogemos el siguiente elemento
+            T elemento = it.next();
+
+            // Flag para comprobrar si el numero ha podido ser añadido
+            boolean añadido = false;
+
+            // Intentamos meter el elemento en algun subconjunto del Col_final
+            for (Set<T> subconjunto : Col_final) {
+
+                // Comprobamos si entra en algun subconjunto
+                if (subconjunto.add(elemento)) {
+
+                    // Marcamos el añadido como true
+                    añadido = true;
+
+                    // Como ha sido añadido hacemos que termine el bucle para que no se meta en mas Sets
+                    break;
+                }
+            }
+
+            // Si ha recorrido todos los subconjuntos y aun añadido es false creamos otro nuevo y lo metemos dentro
+            if (añadido == false) {
+
+                // Creamos el set nuevo
+                HashSet<T> nuevo_Set = new HashSet<>();
+
+                // Metemos el numero elemento dentro
+                nuevo_Set.add(elemento);
+
+                // Metemos el nuevo_Set en el set_final
+                Col_final.add(nuevo_Set); 
+            }
+        }
+
+        return Col_final;
     }
 
     //EJERCICIO 4
-    public static<T> Collection<Set<T>> coverageSet2 (Set<T> u,ArrayList<Set<T>> col) {
-        //TODO
-        return null;
+    public static<T> Collection<Set<T>> coverageSet2 (Set<T> u, ArrayList<Set<T>> col) {
+        
+        // Collection de sets final
+        Collection<Set<T>> col_final = new HashSet<>();
+
+        // Creamos un HashSet Auxiliar y Metemos todos los sets de la Lista col en el Auxiliar
+        HashSet<Set<T>> setAux = new HashSet<>(col);
+
+        // Ahora recorremos todos los subconjuntos
+        for (Set<T> subconjunto : col) {
+
+            // Para cada subconjunto Calculamos cual deberia ser su complemento para ser igual al Set<T>u
+            HashSet<T> complemento = new HashSet<>(u);
+
+            // Por tanto Restamos U - Subconjunto 
+            complemento.removeAll(subconjunto);
+
+            // Y ahora comprobamos si el Complemento necesario se encuentra en nuestro HashSet auxiliar
+            if (setAux.contains(complemento)) {
+
+                // Si encuentra añadimos a nuestro col_final los 2 metodos
+                col_final.add(subconjunto);
+                col_final.add(complemento);
+
+                return col_final;
+            }
+        }
+
+        // Si no encuentra nada devolvemos la coleccion vacia
+        return col_final;
+
     }
-
-
 
 }
