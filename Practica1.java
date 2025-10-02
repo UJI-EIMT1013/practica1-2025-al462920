@@ -13,7 +13,6 @@ public class Practica1 {
         // Crear la lista interna
         List<Integer> numeros = new ArrayList<>();
 
-
         // Guardamos todos los elementos del iterador en una nueva lista
         while (it.hasNext()) {
             
@@ -24,12 +23,7 @@ public class Practica1 {
 
         // Dos bucles Para comparar cada numero y ver si es multiple de los otros
         for (int i = 0; i < numeros.size(); i++) {
-            for (int j = 0; j < numeros.size(); j++) {
-
-                // No comparamos un elemento consigo mismo
-                if (i == j) {
-                    continue;
-                }
+            for (int j = i + 1; j < numeros.size(); j++) {
 
                 // Obtenemos los números usando los índices
                 Integer potencialMultiplo = numeros.get(i);
@@ -86,25 +80,6 @@ public class Practica1 {
             } else {
                 noCuadrados.add(n);
             }
-
-
-
-            // Calculamos el cuadrado
-            //int cuadrado = potencial_cuadrado * potencial_cuadrado;
-
-            // Miramos si esta en el set_auxiliar
-            //if (set_auxiliar.contains(cuadrado)) {
-
-                // Esta en set_auxiliar, por tanto metemos el cuadrado a el set cuadrado
-                //cuadrados.add(cuadrado);
-                
-            //}
-            //else {
-
-                // No esta en set_auxiliar por lo tanto lo metemos a noCuadrados
-                //noCuadrados.add(potencial_cuadrado);
-
-            //}
         }
 
         // Tratamiento especial del 1
@@ -166,40 +141,42 @@ public class Practica1 {
                 Col_final.add(nuevo_Set); 
             }
         }
-
         return Col_final;
+
     }
 
     //EJERCICIO 4
     public static<T> Collection<Set<T>> coverageSet2 (Set<T> u, ArrayList<Set<T>> col) {
-        
+
         // Collection de sets final
         Collection<Set<T>> col_final = new HashSet<>();
 
-        // Creamos un HashSet Auxiliar y Metemos todos los sets de la Lista col en el Auxiliar
-        HashSet<Set<T>> setAux = new HashSet<>(col);
-
-        // Ahora recorremos todos los subconjuntos
+        // Ahora para cada subconjunto recorremos los demas
         for (Set<T> subconjunto : col) {
+            
+            for (Set<T> subconjunto2 : col) {
 
-            // Para cada subconjunto Calculamos cual deberia ser su complemento para ser igual al Set<T>u
-            HashSet<T> complemento = new HashSet<>(u);
+                // Creamos un conjunto auxiliar que contiene el subconjunto
+                Set<T> setAuxiliar = new HashSet<>(subconjunto);
 
-            // Por tanto Restamos U - Subconjunto 
-            complemento.removeAll(subconjunto);
+                // Hacemos la union de los 2 subconjuntos
+                setAuxiliar.addAll(subconjunto2);
 
-            // Y ahora comprobamos si el Complemento necesario se encuentra en nuestro HashSet auxiliar
-            if (setAux.contains(complemento)) {
+                // Comprobamos si la union es igual al conjunto u
+                if (setAuxiliar.equals(u)) {
 
-                // Si encuentra añadimos a nuestro col_final los 2 metodos
-                col_final.add(subconjunto);
-                col_final.add(complemento);
+                    // Comprobamos que cualquiera de los 2 subconjuntos ya cumple que es igual al Set u, por tanto no son 2 conjuntos
+                    if (!subconjunto.equals(u) && !subconjunto2.equals(u)) {
 
-                return col_final;
+                        // Los añadimos a la col_final
+                        col_final.add(subconjunto);
+                        col_final.add(subconjunto2);
+
+                        break;
+                    }
+                }   
             }
         }
-
-        // Si no encuentra nada devolvemos la coleccion vacia
         return col_final;
 
     }
